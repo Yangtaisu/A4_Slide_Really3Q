@@ -1,7 +1,7 @@
 ---
-title: "Select"
-subtitle: "select"
-author: "really3Q"
+title: "The Causes of Death in the World"
+subtitle: "Really3Q"
+author: "JingyiShi MiaoSun JingwenOu YuQin"
 institute: "Department of Econometrics and Business Statistics"
 output:
   xaringan::moon_reader:
@@ -10,7 +10,201 @@ output:
     yolo: FALSE
 ---
 
-
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
 ```
+
+```{r , echo = FALSE, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(ggplot2)
+library(readr)
+library(knitr)
+library(plotly)
+library(gganimate)
+library(gifski)
+```
+
+```{r,  echo = FALSE, message = FALSE, warning = FALSE}
+annual_number_of_deaths_by_cause <- read_csv("Data/annual-number-of-deaths-by-cause.csv", 
+    col_types = cols(`Number of executions` = col_double()))
+life_expectancy <- read_csv("Data/life-expectancy.csv")
+share_with_depression <- read_csv("Data/share-with-depression.csv")
+```
+
+```{r , echo = FALSE, message = FALSE, warning = FALSE}
+world_data <-annual_number_of_deaths_by_cause %>% 
+  filter(!is.na(Code),
+         Year %in% c(1990:2018)) %>%
+  pivot_longer(cols =  -c(1:3), 
+               names_to = "Death_cause", 
+               values_to = "Count") %>% 
+  group_by(Year,Death_cause) %>% 
+  summarise(Death_amount=sum(Count, na.rm = TRUE))
+
+p1 <- ggplot(world_data,
+       mapping = aes(x=Year,
+                     y=Death_amount,
+                     color=Death_cause))+
+  geom_line()+
+  theme_bw()
+
+disease_data <- annual_number_of_deaths_by_cause %>% 
+  select(1,3,5,6,7,8,9,12,13,14,15,16,17,18,22,24,26,27,32,33,34,36) %>% 
+  filter(Country %in% c("Australia","Switzerland"),
+         Year %in% c(1990:2018)) %>% 
+  pivot_longer(cols =  -c(1:3), 
+               names_to = "Death_cause", 
+               values_to = "Count")
+
+AZ_life_expectancy <- life_expectancy %>% filter(
+  Entity %in% c("Australia","Switzerland"),
+  Year %in% c(1990:2018)
+) %>% 
+  rename("Country" = "Entity",
+         "Life_expectancy" = "Life expectancy") %>% 
+  select(-Code)
+
+DL_data <- disease_data %>% 
+  left_join(AZ_life_expectancy,by=c("Country","Year"))
+
+p2 <-ggplot(DL_data,
+       mapping = aes(x=Year,
+                     y=Count,
+                     color=Death_cause))+
+  geom_line()+
+    facet_wrap(~Country,
+             scales = "free_y")+
+  theme_bw()
+
+p3 <-ggplot(DL_data,
+       mapping = aes(x=Year,
+                     y=Count,
+                     color=Death_cause))+
+  geom_line()+
+  geom_line(aes(y=Life_expectancy*500),
+            color="#1CDC4B",
+            size=1)+
+  geom_point(aes(y=Life_expectancy*500),
+             color="#12F09E",
+             size=1)+
+    scale_y_continuous(name = "Number of deaths by disease causes",
+    sec.axis = sec_axis(trans =~./500,
+                        name = "Life expectancy"))+
+    facet_wrap(~Country,
+             scales = "free_y",
+             nrow=2)+
+  theme_bw()
+
+other_data <- annual_number_of_deaths_by_cause %>% 
+  select(1,3,4,10,11,19,20,21,23,25,28,29,30,31,35) %>% 
+  filter(Country %in% c("Australia","Switzerland"),
+         Year %in% c(1990:2018)) %>% 
+  pivot_longer(cols =  -c(1:3), 
+               names_to = "Death_cause", 
+               values_to = "Count")
+
+
+AZ_share_with_depression <-share_with_depression  %>% filter(
+  Entity %in% c("Australia","Switzerland"),
+  Year %in% c(1990:2018)
+) %>% 
+  rename("Country" = "Entity",
+         "Depressive_disorders" = "Depressive disorders") %>% 
+  select(-Code)
+
+DD_data <- other_data %>% 
+  left_join(AZ_share_with_depression,by=c("Country","Year"))
+
+p4 <- ggplot(DD_data,
+       mapping = aes(x=Year,
+                     y=Count,
+                     color=Death_cause))+
+  geom_line()+
+  facet_wrap(~Country,
+             scales = "free_y")
+
+  
+  p5 <- ggplot(DD_data,
+       mapping = aes(x=Year,
+                     y=Count,
+                     color=Death_cause))+
+  geom_line()+  
+  geom_line(aes(y=Depressive_disorders*300),
+            color="#2399F5",
+            size=1)+
+  geom_point(aes(y=Depressive_disorders*300),
+             color="#99C3E5",
+             size=1)+
+    scale_y_continuous(name = "Number of deaths by other causes",
+    sec.axis = sec_axis(trans =~./300,
+                        name = "Depressive disorders %"))+
+  
+    facet_wrap(~Country,
+             scales = "free_y",
+             nrow=2)
+
+```
+
+```{r eval = TRUE, echo = FALSE, warning = FALSE, message = FALSE}
+world_data_arrange <- world_data %>% 
+  group_by(Year) %>% 
+  arrange(Year, desc(Death_amount)) %>% 
+  mutate(ranking = row_number()) 
+```
+background:DBE6B4
+background-size: cover
+--
+## Death Causes since 1990
+--
+```{r eval = TRUE, echo = FALSE, warning = FALSE, message = FALSE, fig.align="center"}
+ggplot(world_data_arrange,
+       aes(x = ranking,
+           y = Death_amount)) +
+  geom_col(aes(fill = Death_cause)) +
+  geom_text(aes(label = Death_amount), hjust = -0.1) +
+  geom_text(aes(y = 0, label = Death_cause), hjust = 1.1) +
+  coord_flip(clip = "off") +
+  scale_x_reverse() +
+  theme_void() +
+  theme(
+    axis.ticks = element_blank(),
+    axis.text = element_blank(),
+    legend.position = 'none',
+    plot.margin = margin(1, 4, 1, 3, "cm")) +
+  labs(title = 'Year: {closest_state}', y = "Number of deaths by cause", x="") +
+  transition_states(Year) +
+  enter_fade() +
+  exit_fade() +
+  ease_aes('quadratic-in-out') 
+```
+
+---
+## Number of Deaths by Causes, World, 1990 to 2019.
+--
+```{r echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '120%', }
+ggplotly(p1)
+```
+---
+### Number of deaths by disease causes in Australia and Switzerland.
+--
+```{r echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '120%', }
+ggplotly(p2)
+```
+---
+### Add a line of life expectancy
+```{r echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '120%', }
+p3
+```
+---
+### Number of deaths by other causes in Australia and Switzerland.
+--
+```{r echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '120%', }
+ggplotly(p4)
+```
+---
+### Add a line of percentage of Depressive disorders
+--
+```{r echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '120%', }
+p5
+```
+
