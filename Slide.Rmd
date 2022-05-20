@@ -6,7 +6,8 @@ institute: "Department of Econometrics and Business Statistics"
 output:
   xaringan::moon_reader:
     lib_dir: libs
-    css: css/style.css
+    background-image: url(5331.webp);
+    background-size: cover;
     yolo: FALSE
 ---
 
@@ -22,6 +23,7 @@ library(knitr)
 library(plotly)
 library(gganimate)
 library(gifski)
+library(DT)
 ```
 
 ```{r,  echo = FALSE, message = FALSE, warning = FALSE}
@@ -91,8 +93,7 @@ p3 <-ggplot(DL_data,
     sec.axis = sec_axis(trans =~./500,
                         name = "Life expectancy"))+
     facet_wrap(~Country,
-             scales = "free_y",
-             nrow=2)+
+             scales = "free_y")+
   theme_bw()
 
 other_data <- annual_number_of_deaths_by_cause %>% 
@@ -121,27 +122,10 @@ p4 <- ggplot(DD_data,
                      color=Death_cause))+
   geom_line()+
   facet_wrap(~Country,
-             scales = "free_y")
+             scales = "free_y")+
+  theme_bw()
 
-  
-  p5 <- ggplot(DD_data,
-       mapping = aes(x=Year,
-                     y=Count,
-                     color=Death_cause))+
-  geom_line()+  
-  geom_line(aes(y=Depressive_disorders*300),
-            color="#2399F5",
-            size=1)+
-  geom_point(aes(y=Depressive_disorders*300),
-             color="#99C3E5",
-             size=1)+
-    scale_y_continuous(name = "Number of deaths by other causes",
-    sec.axis = sec_axis(trans =~./300,
-                        name = "Depressive disorders %"))+
-  
-    facet_wrap(~Country,
-             scales = "free_y",
-             nrow=2)
+
 
 ```
 
@@ -156,7 +140,7 @@ background-size: cover
 --
 ## Death Causes since 1990
 --
-```{r eval = TRUE, echo = FALSE, warning = FALSE, message = FALSE, fig.align="center"}
+```{r eval = TRUE, echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '80%'}
 ggplot(world_data_arrange,
        aes(x = ranking,
            y = Death_amount)) +
@@ -181,30 +165,58 @@ ggplot(world_data_arrange,
 ---
 ## Number of Deaths by Causes, World, 1990 to 2019.
 --
-```{r echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '120%', }
+```{r echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '120%' }
 ggplotly(p1)
 ```
 ---
-### Number of deaths by disease causes in Australia and Switzerland.
+
+## Interested Country: Australia and Switzerland
+
+<br>
+<br>
 --
-```{r echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '120%', }
+**Q1: In Australia and Switzerland, what are the top three diseases that cause the most deaths per year deaths by disease and what has been the trend over the years?**
+<br>
+<br>
+--
+**Q2: What is the highest number of other causes of death and what has been the trend over the years？**
+---
+## Number of deaths by disease causes in Australia and Switzerland.
+--
+```{r echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '120%' }
 ggplotly(p2)
 ```
 ---
-### Add a line of life expectancy
-```{r echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '120%', }
-p3
+## Life Expectancy in Australia and Switzerland 
+```{r echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '80%', }
+life_table <- life_expectancy %>% 
+  filter(
+  Year %in% (1990:2018),
+  Entity %in% c("Australia","Switzerland")
+)
+datatable(life_table)
 ```
 ---
-### Number of deaths by other causes in Australia and Switzerland.
+## Add a line of life expectancy
+
+```{r echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",fig.width=6.8,fig.height=3.7 }
+knitr::include_graphics("figs/Rplot.png")
+```
+
+---
+## Number of deaths by other causes in Australia and Switzerland.
 --
 ```{r echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '120%', }
 ggplotly(p4)
 ```
 ---
-### Add a line of percentage of Depressive disorders
---
-```{r echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '120%', }
-p5
+## 2009Black Saturday bushfires
+
+The Black Saturday bushfires were a series of bushfires that either ignited or were already burning across the Australian state of Victoria on and around Saturday, 7 February 2009, and were among Australia's all-time worst bushfire disasters. The fires occurred during extreme bushfire weather conditions and resulted in Australia's highest-ever loss of human life from a bushfire, with 173 fatalities.
+```{r echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",fig.width=6.8,fig.height=3.7 }
+knitr::include_graphics("figs/fire.jpg")
 ```
+
+
+
 
