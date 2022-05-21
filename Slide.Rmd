@@ -6,8 +6,6 @@ institute: "Department of Econometrics and Business Statistics"
 output:
   xaringan::moon_reader:
     lib_dir: libs
-    background-image: url(5331.webp);
-    background-size: cover;
     yolo: FALSE
 ---
 
@@ -169,7 +167,7 @@ ggplot(world_data_arrange,
 ggplotly(p1)
 ```
 ---
-
+class: inverse 
 ## Interested Country: Australia and Switzerland
 
 <br>
@@ -212,7 +210,7 @@ ggplotly(p4)
 ---
 ## 2009Black Saturday bushfires
 
-The Black Saturday bushfires were a series of bushfires that either ignited or were already burning across the Australian state of Victoria on and around Saturday, 7 February 2009, and were among Australia's all-time worst bushfire disasters. The fires occurred during extreme bushfire weather conditions and resulted in Australia's highest-ever loss of human life from a bushfire, with 173 fatalities.
+The Black Saturday bushfires were a series of bushfires that either ignited or were already burning across the Australian state of Victoria on and around Saturday, 7 February 2009, and were among Australia's all-time worst bushfire disasters. 
 ```{r echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",fig.width=6.8,fig.height=3.7 }
 knitr::include_graphics("figs/fire.jpg")
 ```
