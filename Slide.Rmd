@@ -9,7 +9,11 @@ output:
     yolo: FALSE
 ---
 
+<<<<<<< HEAD
 ```{r,setup, include=FALSE}
+=======
+```{r setup, include=FALSE}
+>>>>>>> Sun_Miao
 options(htmltools.dir.version = FALSE)
 ```
 
@@ -32,6 +36,7 @@ life_expectancy <- read_csv("Data/life-expectancy.csv")
 GDP <- read_csv("Data/GDP.csv")
 ```
 
+<<<<<<< HEAD
 ```{r , echo = FALSE, message = FALSE, warning = FALSE}
 world_data <-annual_number_of_deaths_by_cause %>% 
   filter(!is.na(Code),
@@ -224,6 +229,175 @@ The Black Saturday bushfires were a series of bushfires that either ignited or w
 ```{r,echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '100%'}
 knitr::include_graphics("figs/fire.jpg")
 ```
+=======
+
+
+```{r , echo = FALSE, message = FALSE, warning = FALSE}
+df_global <-  annual_number_of_deaths_by_cause %>%
+  filter(Year %in% c(1950:2018)) %>% 
+  pivot_longer(
+    cols =  -c(Country, Code, Year),
+    names_to = "Death_cause",
+    values_to = "Count"
+  )
+
+df_CI <- df_global %>%  
+  filter(Country %in% c("China", "India"))
+
+interest <- c(
+  "Cardiovascular diseases",
+  "Diabetes mellitus",
+  "HIV/AIDS",
+  "Neoplasms",
+  "Nutritional deficiencies",
+  "Malaria"
+)
+```
+
+
+
+```{r , echo = FALSE, message = FALSE, warning = FALSE}
+CI_Percent <- df_CI%>% 
+  group_by(Country,
+           Year) %>% 
+  mutate(Total_death = sum(Count, na.rm = TRUE)*100
+         ) %>% 
+  group_by(Country,
+           Year,
+           Death_cause,
+           Total_death) %>% 
+  summarize(Percentage = Count/Total_death*100) %>% 
+  group_by(Country,
+           Death_cause) %>% 
+  arrange(desc(Percentage)) %>% 
+  filter(Death_cause %in% interest)
+
+CI_Total <- df_CI %>%
+  group_by(Country,
+           Year,
+           Death_cause) %>%
+  mutate(Death_abs = sum(Count, na.rm = TRUE)) %>%
+  filter(Death_cause %in% interest) %>%
+  group_by(Year,
+           Country,
+           Death_cause,
+           Death_abs) %>%
+  summarise() %>%
+  left_join(GDP, by = c ("Country" = "Entity", 
+                         "Year" = "Year"))
+```
+
+```{r Percentage Change in China and India, echo = FALSE, message = FALSE, warning = FALSE}
+Percentage_trend <- CI_Percent %>% 
+  ggplot(aes(x = Year,
+             y = Percentage,
+             color = Death_cause))+
+  geom_line() +
+  theme_bw()+
+  facet_wrap(~Country, nrow = 2, scales = "free_y")
+
+Absolute_trend <- CI_Total %>% 
+  ggplot(aes(x = Year))+
+  geom_line(aes(y = Death_abs,
+             color = Death_cause)) +
+  geom_line(aes(y = gdppc*500)) +
+  facet_wrap(~Country, nrow = 2, scales = "free_y") +
+  theme_bw()
+```
+
+class: inverse 
+## Interested Country: China and India
+<br>
+<br>
+--
+**Q1: What are the diseases that growing fastest in developing country?**
+<br>
+<br>
+--
+**Q2: How the diseases changes with the change of GDP per capita**
+--
+
+### 6 most typical diseases we focusing on 
+
+#### Cardiovascular diseases
+
+#### Diabetes mellitus
+  
+#### HIV/AIDS
+  
+#### Neoplasms
+  
+#### Nutritional deficiencies
+  
+#### Malari
+
+
+---
+## Percentage of the 6 Death causes in China and India
+--
+
+```{r percentage trend, echo = FALSE, message = FALSE, warning = FALSE, fig.align="center", out.width = '100%'}
+ggplotly(Percentage_trend)
+```
+
+---
+
+## Number of people that dead from the 6 deseases
+--
+```{r absolute trend, echo = FALSE, warning = FALSE, message = FALSE, fig.align="center", out.width = '100%'}
+ggplotly(Absolute_trend)
+```
+
+
+---
+
+## Number of death caused by "Cardiovascular diseases" and "Neoplasms" against GDP per capita
+```{r Run regression with the number of deasease against GDP per capita, , echo = FALSE, warning = FALSE, message = FALSE}
+CI_model <- CI_Total %>%
+  filter(Death_cause %in% c("Cardiovascular diseases", "Neoplasms")) %>%
+  group_by(Country,
+           Death_cause) %>%
+  nest() %>%
+  mutate(model = map(
+    .x = data,
+    .f = function(x) {
+      lm(Death_abs ~ gdppc,
+         data = x)
+    }
+  ))
+
+CI_coef <- CI_model %>%
+  mutate (tidy = map(model, tidy)) %>%
+  unnest(tidy) %>%
+  select(Country, Death_cause, term, estimate) %>%
+  pivot_wider(
+    id_cols = c("Country", "Death_cause"),
+    names_from = term,
+    values_from = estimate
+  ) %>%
+  rename("Intercept" = "(Intercept)",
+         "Slope" = "gdppc")
+
+CI_model_fitness <- CI_model %>%
+  mutate(glance = map(model, glance)) %>%
+  unnest(glance) %>%
+  select(Country, Death_cause, r.squared) %>%
+  mutate(r.squared = round(r.squared, 2)) %>% 
+  right_join(CI_coef) %>% 
+  mutate(Intercept = round(Intercept, 2),
+         Slope = round(Slope, 2))
+
+datatable(CI_model_fitness)
+```
+
+#### For every 1 unit of gdppc increase, the number of death caused by the deceased will increase by the number of the slope.
+
+#### R^2 means the percentage of variability observed in the target variable is explained by the regression model.
+
+
+
+
+>>>>>>> Sun_Miao
 
 
 
