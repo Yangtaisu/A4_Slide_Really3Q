@@ -9,7 +9,7 @@ output:
     yolo: FALSE
 ---
 
-```{r setup, include=FALSE}
+```{r,setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
 ```
 
@@ -104,18 +104,7 @@ other_data <- annual_number_of_deaths_by_cause %>%
                values_to = "Count")
 
 
-AZ_share_with_depression <-share_with_depression  %>% filter(
-  Entity %in% c("Australia","Switzerland"),
-  Year %in% c(1990:2018)
-) %>% 
-  rename("Country" = "Entity",
-         "Depressive_disorders" = "Depressive disorders") %>% 
-  select(-Code)
-
-DD_data <- other_data %>% 
-  left_join(AZ_share_with_depression,by=c("Country","Year"))
-
-p4 <- ggplot(DD_data,
+p4 <- ggplot(other_data,
        mapping = aes(x=Year,
                      y=Count,
                      color=Death_cause))+
@@ -128,7 +117,7 @@ p4 <- ggplot(DD_data,
 
 ```
 
-```{r eval = TRUE, echo = FALSE, warning = FALSE, message = FALSE}
+```{r,eval = TRUE, echo = FALSE, warning = FALSE, message = FALSE}
 world_data_arrange <- world_data %>% 
   group_by(Year) %>% 
   arrange(Year, desc(Death_amount)) %>% 
@@ -139,7 +128,7 @@ background-size: cover
 --
 ## Death Causes since 1990
 --
-```{r eval = TRUE, echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '80%'}
+```{r,eval = TRUE, echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '80%'}
 ggplot(world_data_arrange,
        aes(x = ranking,
            y = Death_amount)) +
@@ -164,9 +153,16 @@ ggplot(world_data_arrange,
 ---
 ## Number of Deaths by Causes, World, 1990 to 2019.
 --
-```{r echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '120%' }
+
+
+```{r,echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '120%' }
 ggplotly(p1)
 ```
+
+
+
+
+
 ---
 class: inverse 
 ## Interested Country: Australia and Switzerland
@@ -182,12 +178,17 @@ class: inverse
 ---
 ## Number of deaths by disease causes in Australia and Switzerland.
 --
-```{r echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '120%' }
+```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '120%' }
 ggplotly(p2)
 ```
+
+
+
+
+
 ---
 ## Life Expectancy in Australia and Switzerland 
-```{r echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '80%', }
+```{r,echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '80%', }
 life_table <- life_expectancy %>% 
   filter(
   Year %in% (1990:2018),
@@ -195,24 +196,32 @@ life_table <- life_expectancy %>%
 )
 datatable(life_table)
 ```
+
+
 ---
 ## Add a line of life expectancy
 
-```{r echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",fig.width=6.8,fig.height=3.7 }
+```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",fig.width=6.8,fig.height=3.7 }
 knitr::include_graphics("figs/Rplot.png")
 ```
 
 ---
 ## Number of deaths by other causes in Australia and Switzerland.
 --
-```{r echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '120%' }
+
+
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '120%' }
 ggplotly(p4)
 ```
+
+
+
 ---
 ## 2009Black Saturday bushfires
 
 The Black Saturday bushfires were a series of bushfires that either ignited or were already burning across the Australian state of Victoria on and around Saturday, 7 February 2009, and were among Australia's all-time worst bushfire disasters. 
-```{r echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '100%'}
+```{r,echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '100%'}
 knitr::include_graphics("figs/fire.jpg")
 ```
 
