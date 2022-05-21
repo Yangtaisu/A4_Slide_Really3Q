@@ -22,13 +22,14 @@ library(plotly)
 library(gganimate)
 library(gifski)
 library(DT)
+library(broom)
 ```
 
 ```{r,  echo = FALSE, message = FALSE, warning = FALSE}
 annual_number_of_deaths_by_cause <- read_csv("Data/annual-number-of-deaths-by-cause.csv", 
     col_types = cols(`Number of executions` = col_double()))
 life_expectancy <- read_csv("Data/life-expectancy.csv")
-share_with_depression <- read_csv("Data/share-with-depression.csv")
+GDP <- read_csv("Data/GDP.csv")
 ```
 
 ```{r , echo = FALSE, message = FALSE, warning = FALSE}
