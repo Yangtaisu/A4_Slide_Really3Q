@@ -32,6 +32,8 @@ life_expectancy <- read_csv("Data/life-expectancy.csv")
 GDP <- read_csv("Data/GDP.csv")
 ```
 
+
+
 ```{r , echo = FALSE, message = FALSE, warning = FALSE}
 df_global <-  annual_number_of_deaths_by_cause %>%
   filter(Year %in% c(1950:2018)) %>% 
