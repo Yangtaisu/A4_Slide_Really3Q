@@ -9,6 +9,7 @@ output:
     yolo: FALSE
 ---
 
+
 ```{r,setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
 ```
@@ -153,20 +154,12 @@ ggplot(world_data_arrange,
 ---
 ## Number of Deaths by Causes, World, 1990 to 2019.
 --
-
-
 ```{r,echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '120%' }
 ggplotly(p1)
 ```
-
-
-
-
-
 ---
 class: inverse 
 ## Interested Country: Australia and Switzerland
-
 <br>
 <br>
 --
@@ -181,11 +174,6 @@ class: inverse
 ```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '120%' }
 ggplotly(p2)
 ```
-
-
-
-
-
 ---
 ## Life Expectancy in Australia and Switzerland 
 ```{r,echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '80%', }
@@ -196,8 +184,6 @@ life_table <- life_expectancy %>%
 )
 datatable(life_table)
 ```
-
-
 ---
 ## Add a line of life expectancy
 
@@ -209,13 +195,9 @@ knitr::include_graphics("figs/Rplot.png")
 ## Number of deaths by other causes in Australia and Switzerland.
 --
 
-
-
 ```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '120%' }
 ggplotly(p4)
 ```
-
-
 
 ---
 ## 2009Black Saturday bushfires
@@ -247,8 +229,6 @@ interest <- c(
   "Malaria"
 )
 ```
-
-
 
 ```{r , echo = FALSE, message = FALSE, warning = FALSE}
 CI_Percent <- df_CI%>% 
@@ -325,7 +305,6 @@ class: inverse
   
 #### Malari
 
-
 ---
 ## Percentage of the 6 Death causes in China and India
 --
@@ -341,7 +320,6 @@ ggplotly(Percentage_trend)
 ```{r absolute trend, echo = FALSE, warning = FALSE, message = FALSE, fig.align="center", out.width = '100%'}
 ggplotly(Absolute_trend)
 ```
-
 
 ---
 
@@ -390,6 +368,111 @@ datatable(CI_model_fitness)
 
 
 
+```{r,echo = FALSE, message = FALSE, warning = FALSE}
+Mexico <- annual_number_of_deaths_by_cause %>%
+  filter(Country == "Mexico") %>%
+  filter(!is.na(Code), Year >= 2005) %>%
+  pivot_longer(cols = c(4:36), 
+               names_to = "Death_cause", 
+               values_to = "Count") %>% 
+  group_by(Death_cause) %>% 
+  summarise(Death_amount=sum(Count, na.rm = TRUE))%>%
+  arrange(desc(Death_amount))
 
+Germany <- annual_number_of_deaths_by_cause %>%
+  filter(Country == "Germany") %>%
+  filter(!is.na(Code), Year >= 2005) %>%
+  pivot_longer(cols = c(4:36), 
+               names_to = "Death_cause", 
+               values_to = "Count") %>% 
+  group_by(Death_cause) %>% 
+  summarise(Death_amount=sum(Count, na.rm = TRUE))%>%
+  arrange(desc(Death_amount))
+
+
+
+Mexico_cause <- annual_number_of_deaths_by_cause %>% 
+    select(-2, -4) %>% 
+  filter(Country == "Mexico",
+         Year >= 2005) %>% 
+  pivot_longer(cols =  -c(1:2), 
+               names_to = "Death_cause", 
+               values_to = "Count") 
+Mexico_plot <- Mexico_cause %>%
+  filter(Death_cause %in% c("Cardiovascular diseases", 
+                            "Neoplasms",
+                            "Chronic kidney disease",
+                            "Digestive diseases",
+                            "Diabetes mellitus")) %>%
+  ggplot(mapping = aes(x = Year)) +
+  geom_line(aes(y = Count,
+  color = Death_cause)) +
+  ggtitle("Mexico death cause trend")+
+  theme_bw()
+
+Germany_cause <- annual_number_of_deaths_by_cause %>% 
+    select(-2, -4) %>% 
+  filter(Country == "Germany",
+         Year >= 2005) %>% 
+  pivot_longer(cols =  -c(1:2), 
+               names_to = "Death_cause", 
+               values_to = "Count") 
+Germany_plot <- Germany_cause %>%
+  filter(Death_cause %in% c("Cardiovascular diseases", 
+                            "Neoplasms",
+                            "Digestive diseases",
+                            "Alzheimer's disease and other dementias",
+                            "Chronic respiratory diseases")) %>%
+  ggplot(mapping = aes(x = Year)) +
+  geom_line(aes(y = Count,
+  color = Death_cause)) +
+  ggtitle("Germany death cause trend")+
+  theme_bw()
+```
+
+---
+class: inverse 
+## Interested Country: Mexico and Germany
+
+<br>
+<br>
+--
+**Q1: In Mexico and Germany, what are the top five diseases that cause the most deaths from 2005?**
+<br>
+<br>
+--
+**Q2: What are the trends of these countries over the 15 years？**
+
+---
+## Table of top 5 cauese of death in Mexico since 2005
+--
+```{r echo = FALSE, warning = FALSE, message = FALSE}
+Mexico %>% 
+  arrange(desc(Death_amount)) %>% 
+  head(5) %>% 
+  kable( )
+```
+
+---
+## Table of top 5 cauese of death in Germany since 2005
+--
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+Germany %>% 
+  arrange(desc(Death_amount)) %>% 
+  head(5) %>% 
+  kable( )
+```
+
+---
+## Grpah of the tend of these disease since 2005
+```{r echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '100%', }
+ggplotly(Mexico_plot)
+```
+
+---
+## Grpah of the tend of these disease since 2005
+```{r echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '110%', }
+ggplotly(Germany_plot)
+```
 
 
