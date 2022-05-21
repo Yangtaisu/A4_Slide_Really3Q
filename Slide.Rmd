@@ -1,7 +1,7 @@
 ---
-title: "Select"
-subtitle: "select"
-author: "really3Q"
+title: "The Causes of Death in the World"
+subtitle: "Really3Q"
+author: "JingyiShi MiaoSun JingwenOu YuQin"
 institute: "Department of Econometrics and Business Statistics"
 output:
   xaringan::moon_reader:
@@ -9,19 +9,26 @@ output:
     yolo: FALSE
 ---
 
-```{r setup, include=FALSE , echo = FALSE, message = FALSE, warning = FALSE}
+```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
 ```
 
 ```{r , echo = FALSE, message = FALSE, warning = FALSE}
-library(readr)
 library(tidyverse)
+library(ggplot2)
+library(readr)
 library(knitr)
 library(plotly)
-library(broom)
+library(gganimate)
+library(gifski)
 library(DT)
+library(broom)
+```
+
+```{r,  echo = FALSE, message = FALSE, warning = FALSE}
 annual_number_of_deaths_by_cause <- read_csv("Data/annual-number-of-deaths-by-cause.csv", 
     col_types = cols(`Number of executions` = col_double()))
+life_expectancy <- read_csv("Data/life-expectancy.csv")
 GDP <- read_csv("Data/GDP.csv")
 ```
 
