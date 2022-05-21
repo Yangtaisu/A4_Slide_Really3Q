@@ -9,11 +9,7 @@ output:
     yolo: FALSE
 ---
 
-<<<<<<< HEAD
 ```{r,setup, include=FALSE}
-=======
-```{r setup, include=FALSE}
->>>>>>> Sun_Miao
 options(htmltools.dir.version = FALSE)
 ```
 
@@ -36,7 +32,6 @@ life_expectancy <- read_csv("Data/life-expectancy.csv")
 GDP <- read_csv("Data/GDP.csv")
 ```
 
-<<<<<<< HEAD
 ```{r , echo = FALSE, message = FALSE, warning = FALSE}
 world_data <-annual_number_of_deaths_by_cause %>% 
   filter(!is.na(Code),
@@ -229,9 +224,8 @@ The Black Saturday bushfires were a series of bushfires that either ignited or w
 ```{r,echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '100%'}
 knitr::include_graphics("figs/fire.jpg")
 ```
-=======
 
-
+---
 ```{r , echo = FALSE, message = FALSE, warning = FALSE}
 df_global <-  annual_number_of_deaths_by_cause %>%
   filter(Year %in% c(1950:2018)) %>% 
@@ -395,9 +389,6 @@ datatable(CI_model_fitness)
 #### R^2 means the percentage of variability observed in the target variable is explained by the regression model.
 
 
-
-
->>>>>>> Sun_Miao
 
 
 
