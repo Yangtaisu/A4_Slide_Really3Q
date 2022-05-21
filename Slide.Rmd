@@ -13,15 +13,16 @@ output:
 options(htmltools.dir.version = FALSE)
 ```
 
-```{r,echo = FALSE, message = FALSE, warning = FALSE}
+```{r , echo = FALSE, message = FALSE, warning = FALSE}
 library(tidyverse)
 library(ggplot2)
 library(readr)
 library(knitr)
-library(gridExtra)
-library(reshape2)
 library(plotly)
+library(gganimate)
+library(gifski)
 library(DT)
+library(broom)
 ```
 
 ```{r ,echo = FALSE, message = FALSE, warning = FALSE }
