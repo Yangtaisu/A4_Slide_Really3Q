@@ -173,11 +173,11 @@ class: inverse
 <br>
 <br>
 --
-**Q1: In Australia and Switzerland, what are the top three diseases that cause the most deaths per year deaths by disease and what has been the trend over the years?**
+**Q1: What can be observed in the chart of causes of death due to disease?**
 <br>
 <br>
 --
-**Q2: What is the highest number of other causes of death and what has been the trend over the years？**
+**Q2: What can be observed in the chart of causes of death due to others?**
 ---
 ## Number of deaths by disease causes in Australia and Switzerland.
 --
@@ -204,14 +204,14 @@ knitr::include_graphics("figs/Rplot.png")
 ---
 ## Number of deaths by other causes in Australia and Switzerland.
 --
-```{r echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '120%', }
+```{r echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '120%' }
 ggplotly(p4)
 ```
 ---
 ## 2009Black Saturday bushfires
 
 The Black Saturday bushfires were a series of bushfires that either ignited or were already burning across the Australian state of Victoria on and around Saturday, 7 February 2009, and were among Australia's all-time worst bushfire disasters. 
-```{r echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",fig.width=6.8,fig.height=3.7 }
+```{r echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '100%'}
 knitr::include_graphics("figs/fire.jpg")
 ```
 
