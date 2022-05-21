@@ -6,10 +6,8 @@ institute: "Department of Econometrics and Business Statistics"
 output:
   xaringan::moon_reader:
     lib_dir: libs
-    css: css/style.css
     yolo: FALSE
 ---
-
 
 ```{r setup, include=FALSE , echo = FALSE, message = FALSE, warning = FALSE}
 options(htmltools.dir.version = FALSE)
@@ -20,6 +18,8 @@ library(readr)
 library(tidyverse)
 library(knitr)
 library(plotly)
+library(broom)
+library(DT)
 annual_number_of_deaths_by_cause <- read_csv("Data/annual-number-of-deaths-by-cause.csv", 
     col_types = cols(`Number of executions` = col_double()))
 GDP <- read_csv("Data/GDP.csv")
@@ -86,6 +86,7 @@ Percentage_trend <- CI_Percent %>%
              y = Percentage,
              color = Death_cause))+
   geom_line() +
+  theme_bw()+
   facet_wrap(~Country, nrow = 2, scales = "free_y")
 
 Absolute_trend <- CI_Total %>% 
@@ -93,8 +94,23 @@ Absolute_trend <- CI_Total %>%
   geom_line(aes(y = Death_abs,
              color = Death_cause)) +
   geom_line(aes(y = gdppc*500)) +
-  facet_wrap(~Country, nrow = 2, scales = "free_y")
+  facet_wrap(~Country, nrow = 2, scales = "free_y") +
+  theme_bw()
 ```
+
+class: inverse 
+## Interested Country: China and India
+<br>
+<br>
+--
+**Q1: What are the diseases that growing fastest in developing country?**
+<br>
+<br>
+--
+**Q2: How the diseases changes with the change of GDP per capita**
+--
+
+### 6 most typical diseases we focusing on 
 
 #### Cardiovascular diseases
 
@@ -110,20 +126,66 @@ Absolute_trend <- CI_Total %>%
 
 
 ---
-### Percentage of the 5 Death causes in China and India
+## Percentage of the 6 Death causes in China and India
 --
-```{r percentage trend, echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '120%'}
+
+```{r percentage trend, echo = FALSE, message = FALSE, warning = FALSE, fig.align="center", out.width = '100%'}
 ggplotly(Percentage_trend)
 ```
+
 ---
 
-### number of people dead from the 5 deseases
+## Number of people that dead from the 6 deseases
 --
-```{r absolute trend, echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '120%'}
+```{r absolute trend, echo = FALSE, warning = FALSE, message = FALSE, fig.align="center", out.width = '100%'}
 ggplotly(Absolute_trend)
 ```
 
 
+---
+
+## Number of death caused by "Cardiovascular diseases" and "Neoplasms" against GDP per capita
+```{r Run regression with the number of deasease against GDP per capita, , echo = FALSE, warning = FALSE, message = FALSE}
+CI_model <- CI_Total %>%
+  filter(Death_cause %in% c("Cardiovascular diseases", "Neoplasms")) %>%
+  group_by(Country,
+           Death_cause) %>%
+  nest() %>%
+  mutate(model = map(
+    .x = data,
+    .f = function(x) {
+      lm(Death_abs ~ gdppc,
+         data = x)
+    }
+  ))
+
+CI_coef <- CI_model %>%
+  mutate (tidy = map(model, tidy)) %>%
+  unnest(tidy) %>%
+  select(Country, Death_cause, term, estimate) %>%
+  pivot_wider(
+    id_cols = c("Country", "Death_cause"),
+    names_from = term,
+    values_from = estimate
+  ) %>%
+  rename("Intercept" = "(Intercept)",
+         "Slope" = "gdppc")
+
+CI_model_fitness <- CI_model %>%
+  mutate(glance = map(model, glance)) %>%
+  unnest(glance) %>%
+  select(Country, Death_cause, r.squared) %>%
+  mutate(r.squared = round(r.squared, 2)) %>% 
+  right_join(CI_coef) %>% 
+  mutate(Intercept = round(Intercept, 2),
+         Slope = round(Slope, 2))
+
+datatable(CI_model_fitness)
+```
+
+#### For every 1 unit of gdppc increase, the number of death caused by the deceased will increase by the number of the slope.
+
+#### R^2 means the percentage of variability observed in the target variable is explained by the regression model.
 
 
 
