@@ -11,6 +11,124 @@ output:
 ---
 
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE , echo = FALSE, message = FALSE, warning = FALSE}
 options(htmltools.dir.version = FALSE)
 ```
+
+```{r , echo = FALSE, message = FALSE, warning = FALSE}
+library(readr)
+library(tidyverse)
+library(knitr)
+library(plotly)
+annual_number_of_deaths_by_cause <- read_csv("Data/annual-number-of-deaths-by-cause.csv", 
+    col_types = cols(`Number of executions` = col_double()))
+GDP <- read_csv("Data/GDP.csv")
+```
+
+```{r , echo = FALSE, message = FALSE, warning = FALSE}
+df_global <-  annual_number_of_deaths_by_cause %>%
+  filter(Year %in% c(1950:2018)) %>% 
+  pivot_longer(
+    cols =  -c(Country, Code, Year),
+    names_to = "Death_cause",
+    values_to = "Count"
+  )
+
+df_CI <- df_global %>%  
+  filter(Country %in% c("China", "India"))
+
+interest <- c(
+  "Cardiovascular diseases",
+  "Diabetes mellitus",
+  "HIV/AIDS",
+  "Neoplasms",
+  "Nutritional deficiencies",
+  "Malaria"
+)
+```
+
+
+
+```{r , echo = FALSE, message = FALSE, warning = FALSE}
+CI_Percent <- df_CI%>% 
+  group_by(Country,
+           Year) %>% 
+  mutate(Total_death = sum(Count, na.rm = TRUE)*100
+         ) %>% 
+  group_by(Country,
+           Year,
+           Death_cause,
+           Total_death) %>% 
+  summarize(Percentage = Count/Total_death*100) %>% 
+  group_by(Country,
+           Death_cause) %>% 
+  arrange(desc(Percentage)) %>% 
+  filter(Death_cause %in% interest)
+
+CI_Total <- df_CI %>%
+  group_by(Country,
+           Year,
+           Death_cause) %>%
+  mutate(Death_abs = sum(Count, na.rm = TRUE)) %>%
+  filter(Death_cause %in% interest) %>%
+  group_by(Year,
+           Country,
+           Death_cause,
+           Death_abs) %>%
+  summarise() %>%
+  left_join(GDP, by = c ("Country" = "Entity", 
+                         "Year" = "Year"))
+```
+
+```{r Percentage Change in China and India, echo = FALSE, message = FALSE, warning = FALSE}
+Percentage_trend <- CI_Percent %>% 
+  ggplot(aes(x = Year,
+             y = Percentage,
+             color = Death_cause))+
+  geom_line() +
+  facet_wrap(~Country, nrow = 2, scales = "free_y")
+
+Absolute_trend <- CI_Total %>% 
+  ggplot(aes(x = Year))+
+  geom_line(aes(y = Death_abs,
+             color = Death_cause)) +
+  geom_line(aes(y = gdppc*500)) +
+  facet_wrap(~Country, nrow = 2, scales = "free_y")
+```
+
+#### Cardiovascular diseases
+
+#### Diabetes mellitus
+  
+#### HIV/AIDS
+  
+#### Neoplasms
+  
+#### Nutritional deficiencies
+  
+#### Malari
+
+
+---
+### Percentage of the 5 Death causes in China and India
+--
+```{r percentage trend, echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '120%'}
+ggplotly(Percentage_trend)
+```
+---
+
+### number of people dead from the 5 deseases
+--
+```{r absolute trend, echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '120%'}
+ggplotly(Absolute_trend)
+```
+
+
+
+
+
+
+
+
+
+
