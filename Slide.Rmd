@@ -306,8 +306,8 @@ class: inverse , center, middle
 <br>
 --
 **Q2: How the diseases changes with the change of GDP per capita?**
---
-
+---
+class: inverse , center, middle
 ### 6 most typical diseases we focusing on 
 
 #### Cardiovascular diseases
