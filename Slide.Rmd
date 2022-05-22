@@ -309,18 +309,25 @@ class: inverse , center, middle
 ---
 class: inverse , center, middle
 ### 6 most typical diseases we focusing on 
-
-#### Cardiovascular diseases
-
-#### Diabetes mellitus
-
-#### HIV/AIDS
-
-#### Neoplasms
-
-#### Nutritional deficiencies
-
-#### Malari
+<br>
+--
+Cardiovascular diseases
+<br>
+--
+Diabetes mellitus
+<br>
+--
+HIV/AIDS
+<br>
+--
+Neoplasms
+<br>
+--
+Nutritional deficiencies
+<br>
+--
+Malari
+<br>
 
 ---
 ## Percentage of the 6 Death causes in China and India
