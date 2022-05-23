@@ -152,7 +152,7 @@ ggplot(world_data_arrange,
 ```
 
 ---
-## Number of Deaths by Causes, World, 1990 to 2019.
+## Number of Deaths by Causes, World, 1990 to 2018.
 --
 ```{r,echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '120%' }
 ggplotly(p1)
@@ -471,27 +471,29 @@ class: inverse , center, middle
 **Q2: What are the trends of these countries over the 15 years？**
 
 ---
-## Table of top 5 cauese of death in Mexico and Germany since 2005
+## Table of top 5 causes of death in Mexico since 2005
 
 ```{r echo = FALSE, warning = FALSE, message = FALSE}
 
 datatable(Mexico, style = 'bootstrap', class = 'table-bordered table-condensed')
 ```
 ---
-## Table of top 5 cauese of death in Germany since 2005
+## Table of top 5 causes of death in Germany since 2005
+
 
 ```{r echo = FALSE, warning = FALSE, message = FALSE}
 
 datatable(Germany, style = 'bootstrap', class = 'table-bordered table-condensed')
 ```
 ---
-## Grpah of the tend of these disease since 2005
+## Graph of the trend of these diseases in Mexico since 2005
+
 ```{r echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '100%', }
 ggplotly(Mexico_plot)
 ```
 
 ---
-## Grpah of the tend of these disease since 2005
+## Graph of the trend of these diseases in Germany since 2005
 ```{r echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '110%', }
 ggplotly(Germany_plot)
 ```
@@ -571,20 +573,20 @@ class: inverse, center, middle
 **Q2: What is the development trend of these reasons in the above question?**
 
 ---
-## Table of top 5 cauese of death in Benin and Mozambique since 2000
+## Table of top 5 causes of death in Benin and Mozambique since 2000
 
 ```{r echo = FALSE, warning = FALSE, message = FALSE}
 datatable(disease_data_Benin, style = 'bootstrap', class = 'table-bordered table-condensed')
 ```
 ---
-## Table of top 5 cauese of death in Mozambique since 2000
+## Table of top 5 causes of death in Mozambique since 2000
 
 ```{r echo = FALSE, warning = FALSE, message = FALSE}
 datatable(disease_data_Mozambique, style = 'bootstrap', class = 'table-bordered table-condensed')
 ```
 
 ---
-## Grpah of the tend of these disease since 2000
+## Grpah of the tend of these diseases since 2000
 ```{r echo = FALSE, warning = FALSE, message = FALSE}
 gridExtra::grid.arrange(Q1,Q2, nrow = 2)
 ```
