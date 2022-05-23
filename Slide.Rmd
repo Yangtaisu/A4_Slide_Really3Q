@@ -251,7 +251,7 @@ interest <- c(
 CI_Percent <- df_CI%>% 
   group_by(Country,
            Year) %>% 
-  mutate(Total_death = sum(Count, na.rm = TRUE)*100
+  mutate(Total_death = sum(Count, na.rm = TRUE)
          ) %>% 
   group_by(Country,
            Year,
