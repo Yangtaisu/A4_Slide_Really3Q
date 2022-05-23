@@ -127,7 +127,7 @@ world_data_arrange <- world_data %>%
 background:DBE6B4
 background-size: cover
 --
-## Death Causes since 1990
+## Number of Deaths by Causes, World, 1990 to 2018.
 --
 ```{r,eval = TRUE, echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '80%'}
 ggplot(world_data_arrange,
@@ -301,11 +301,11 @@ class: inverse , center, middle
 <br>
 <br>
 --
-**Q1: What are the diseases that growing fastest in developing country?**
+**Q1: What are the diseases that cause the most death in developing countries like China and India?**
 <br>
 <br>
 --
-**Q2: How the diseases changes with the change of GDP per capita?**
+**Q2: How the death caused by those diseases change with the change of GDP per capita?**
 ---
 class: inverse , center, middle
 ### 6 most typical diseases we focusing on 
@@ -526,7 +526,7 @@ arrange(desc(Death_amount))%>%
 
 
 disease_data_Benin_plot <- annual_number_of_deaths_by_cause %>% 
-  select(1,3,9,13,16,17,18,22) %>% 
+  select(1,3,9,16,17,18,22) %>% 
   filter(Country %in% c("Benin"),
          (Year >= 2000)) %>% 
   pivot_longer(cols =  -c(1:2), 
