@@ -179,7 +179,7 @@ ggplotly(p2)
 ```{r,echo = FALSE, warning = FALSE, message = FALSE, fig.align="center",out.width = '80%', }
 life_table <- life_expectancy %>% 
   filter(
-  Year %in% (1990:2019),
+  Year %in% (1990:2018),
   Entity %in% c("Australia","Switzerland")
 )
 datatable(life_table, style = 'bootstrap', class = 'table-bordered table-condensed')
@@ -326,7 +326,7 @@ Neoplasms
 Nutritional deficiencies
 <br>
 --
-Malari
+Malaria
 <br>
 
 ---
@@ -339,7 +339,7 @@ ggplotly(Percentage_trend)
 
 ---
 
-## Number of people that dead from the 6 deseases
+## Number of people that dead from the 6 diseases
 --
 ```{r absolute trend, echo = FALSE, warning = FALSE, message = FALSE, fig.align="center", out.width = '100%'}
 ggplotly(Absolute_trend)
@@ -596,7 +596,7 @@ class: inverse, center, middle
 # Conclusion 
 ---
 class:inverse,center, middle
-# Thank U ~
+# Really Thank U 🥳 ~
 ```{r, echo = FALSE, warning = FALSE, message = FALSE, fig.align="center"}
 knitr::include_graphics("figs/IMG_9580.GIF")
 ```
